@@ -1,0 +1,20 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'Montserrat';
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    background-color: #F4F5F9;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+}
