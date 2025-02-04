@@ -7,9 +7,10 @@ git clone https://github.com/yliasemchenko/historyData.git
 cd historyData
 
 2. В корне проекта создайте файл .env и вставьте в него
-3. API_BASE = 'https://679e2aab946b0e23c062baf1.mockapi.io/data/'
 
-4. Установите зависимости
+API_BASE = 'https://679e2aab946b0e23c062baf1.mockapi.io/data/'
+
+3. Установите зависимости
 
 npm install 
 
