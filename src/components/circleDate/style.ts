@@ -1,4 +1,4 @@
-import  {styled}  from 'styled-components'
+import { styled } from 'styled-components'
 
 const StyleCircle = styled.div`
     position: absolute;
@@ -12,6 +12,7 @@ const StyleCircle = styled.div`
     justify-content: center;
     align-items: center;
     transform-origin: center;
+    transition: transform 4s ease-in-out;
     z-index: 10;
     @media (min-width: 1440px) and (max-width: 1440px) {
         top: 23%;
@@ -25,20 +26,7 @@ const StyleCircle = styled.div`
     
 `
 
-const PointDescr = styled.p`
-    position: absolute;
-    top: 0;
-    left: 0;
-    font-size: 14px;
-    color: #42567A;
-    transform: scale(calc(1 / 6));
-    opacity:0;
-    &.active{
-        opacity:1
-    }
-`
 
 export {
     StyleCircle,
-    PointDescr
 }

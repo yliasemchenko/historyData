@@ -1,15 +1,14 @@
 import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { StyleSliderContainer } from './style';
 import EventDescription from '../eventDescription';
 import { useEffect, useRef, useState } from 'react';
 import SliderButton from './sliderButton';
 import { getData } from '../../services/services';
-import gsap from 'gsap';
 import { Pagination } from "swiper/modules";
 import { SliderProps } from '../../types/interfaces/slider';
+import './style.css'
 
 const HistoryDataSlider:React.FC<SliderProps> = (props) => {
 
@@ -18,6 +17,9 @@ const HistoryDataSlider:React.FC<SliderProps> = (props) => {
   const [isBeginning, setIsBeginning] = useState<boolean>(true)
   const [isEnd, setIsEnd] = useState<boolean>(false)
   const swiperRef = useRef<SwiperClass | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const [animateSlides, setAnimateSlides] = useState<boolean>(false)
+
 
 
   const handleSlideChange = (swiper: SwiperClass) => {
@@ -30,20 +32,17 @@ const HistoryDataSlider:React.FC<SliderProps> = (props) => {
     getData(currentPage)
       .then((sliderInfo) => {
           setSliderData(sliderInfo.events)
+          setAnimateSlides(true)
+          if (timeoutRef.current) clearTimeout(timeoutRef.current)
+          timeoutRef.current = setTimeout(() => setAnimateSlides(false), 4000)
       })
       .catch((error) => console.log(error))
-  }, [currentPage])
-
-  useEffect(() => {
-    if (sliderData) {
-      gsap.fromTo(
-        '.swiper-slide',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 1, stagger: 0.2 }
-      )
+    
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current)
     }
-  }, [sliderData])
-
+  }, [currentPage])
+  
   const isMobile = window.innerWidth < 426
   
   return (
@@ -102,7 +101,10 @@ const HistoryDataSlider:React.FC<SliderProps> = (props) => {
           }}
         >
           {sliderData?.map((item: any, index: any) => (
-            <SwiperSlide key={index} className="swiper-slide" style={{padding: isMobile ? "5px" : "0",}}>
+            <SwiperSlide 
+            key={index} 
+            className={`swiper-slide ${animateSlides ? 'fade-in' : ''}`}
+            style={{padding: isMobile ? "5px" : "0",}}>
               <EventDescription year={item.year} description={item.description} />
             </SwiperSlide>
           ))}

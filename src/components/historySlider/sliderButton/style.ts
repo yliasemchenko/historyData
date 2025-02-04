@@ -1,4 +1,4 @@
-import { styled } from 'styled-components'
+import { styled }  from 'styled-components'
 
 const StyleButton = styled.button<{ disabled: boolean }>`
     width: 40px;

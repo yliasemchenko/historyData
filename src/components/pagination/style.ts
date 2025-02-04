@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import { styled }  from 'styled-components';
  
 const StylePaginationContainer = styled.div`
     display: flex;

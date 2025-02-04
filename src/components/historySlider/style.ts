@@ -1,4 +1,4 @@
-import { keyframes, styled } from 'styled-components'
+import { styled } from 'styled-components'
 
 const StyleSliderContainer = styled.div`
     display:flex;

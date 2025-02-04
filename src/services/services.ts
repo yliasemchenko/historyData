@@ -1,7 +1,7 @@
 
 const getData = async ( number:number) => {
-    
-    let res = await fetch(`${process.env.API_BASE}/${number}`)
+    const API_URL = process.env.API_BASE 
+    let res = await fetch(`${API_URL}/${number}`)
     if (!res.ok) {
         throw  { message: res.statusText,
         status: 'Error',

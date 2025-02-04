@@ -1,7 +1,7 @@
 import { StyleContainerLabel, StyleLabelText } from "./style"
 import { useEffect, useRef, useState } from "react"
-import gsap from 'gsap';
 import { CircleLabelProps } from "../../types/interfaces/circle";
+import './style.css'
 
 
 const CircleLabel:React.FC<CircleLabelProps> = (props) => {
@@ -10,55 +10,36 @@ const CircleLabel:React.FC<CircleLabelProps> = (props) => {
     const label = data.find((item:any) => item.number === currentPage).label
     const labelRef = useRef<HTMLParagraphElement>(null)
     const [showLabel, setShowLabel] = useState("")
+    const [isFading, setIsFading] = useState(false)
 
     const isMobile = window.innerWidth < 426
 
     useEffect(() => {
         setShowLabel("")
-        let timer: number | undefined;
-        if (labelRef.current && !isMobile) {
+        setIsFading(false)
+
+        let timer: number | null = null
+
+        if (!isMobile) {
             timer = window.setTimeout(() => {
-                gsap.fromTo(
-                    labelRef.current,
-                    { 
-                        opacity: 0,
-                        y: 20
-                    },
-                    { 
-                        opacity: 1,
-                        y: 0,
-                        duration: 1,
-                        onUpdate:() => setShowLabel(label)
-                    }
-                )
+                setShowLabel(label)
+                setIsFading(true)
             }, 4000)
         } else {
-            gsap.fromTo(
-                labelRef.current,
-                { 
-                    opacity: 0,
-                    y: 20
-                },
-                { 
-                    opacity: 1,
-                    y: 0,
-                    duration: 1,
-                    onUpdate:() => setShowLabel(label)
-                }
-            )
+            timer = window.setTimeout(() => {
+                setShowLabel(label)
+                setIsFading(true)
+            }, 1000)
         }
-    
+
         return () => {
-        if (timer) {
-            clearTimeout(timer)
-            gsap.killTweensOf(labelRef.current)
-        }
-        }
+            if (timer) clearTimeout(timer)
+        };
     }, [currentPage])
 
     return (
         <StyleContainerLabel>
-            <StyleLabelText ref={labelRef}>{showLabel}</StyleLabelText>
+            <StyleLabelText ref={labelRef} className={isFading ? "fade-in" : ""}>{showLabel}</StyleLabelText>
         </StyleContainerLabel>
     )
 }

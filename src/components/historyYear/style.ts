@@ -6,6 +6,7 @@ const StyleYearBlock = styled.div`
     justify-content:space-around;
     align-items:center;
     margin-bottom:70px;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
     @media (min-width: 310px) and (max-width: 425px) {
         display:flex;
         margin: 0 auto;
@@ -27,6 +28,7 @@ const StyleYearFirstText = styled.p`
     letter-spacing: -0.02em;
     margin-right:20px;
     color:#5D5FEF;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
     @media (min-width: 310px) and (max-width: 425px) {
         font-size: 56px;
         line-height: 72.46px;

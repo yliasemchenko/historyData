@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { StyleCircle, PointDescr } from "./style"
-import gsap from "gsap";
+import { StyleCircle} from "./style"
 import CirclePoint from "./circlePoint";
 import { CircleDateProps } from "../../types/interfaces/circle";
 
@@ -10,17 +9,22 @@ const CircleDate: React.FC<CircleDateProps> = (props) => {
 
     const { points, currentPage, setCurrentPage } = props
 
-    const [rotation, setRotation] = useState<number>(0)
+    const [rotation, setRotation] = useState<number>(-60)
     const totalPoints = points.length
 
     const radiusLaptopL = window.innerWidth > 1439 && window.innerWidth < 1441
 
     useEffect(() => {
-        const index = points.findIndex((point) => point.number === currentPage)
-        if (index !== -1) {
-            animationCircle(currentPage, index)
+        if (circleRef.current) {
+            circleRef.current.style.transform = `rotate(${rotation}deg)`;
         }
-    }, [currentPage]);
+    }, [rotation]);
+
+    useEffect(() => {
+        const angleInDegrees = (360 / totalPoints) * (currentPage - 1)
+        const targetRotation = (angleInDegrees + 60) * (-1)
+        setRotation(targetRotation)
+    }, [currentPage])
 
     const getPointPositions = (index:number, totalPoints:number, radius:number) => {
         const angle = (360 / totalPoints) * index
@@ -32,24 +36,10 @@ const CircleDate: React.FC<CircleDateProps> = (props) => {
     }
 
     const handleClick = (number:number, index:number) => {
-        animationCircle(number, index)
-        setCurrentPage(Number(number))
-    }
-
-    const animationCircle = (number:number, index:number) => {
         const angleInDegrees = (360 / totalPoints) * index
         const targetRotation = (angleInDegrees + 60) * (-1)
-
         setRotation(targetRotation)
-
-        if (circleRef.current) {
-            gsap.to(circleRef.current, {
-                rotate: targetRotation,
-                duration: 4,
-                ease: "power2.inOut",
-                onUpdate: () => setRotation(targetRotation),
-            })
-        } 
+        setCurrentPage(Number(number))
     }
 
     return (

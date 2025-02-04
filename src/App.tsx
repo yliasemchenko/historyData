@@ -1,4 +1,4 @@
-import './App.scss';
+import './App.css';
 import  HistoryDate from './components/historyDate/index';
 import data from './data.json'
 

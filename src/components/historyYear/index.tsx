@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { StyleYearBlock, StyleYearFirstText, StyleYearSecondText } from './style';
-import { gsap } from 'gsap';
 import { HistoryYearProps } from '../../types/interfaces/historyData'; 
 
 const HistoryYear: React.FC<HistoryYearProps> = (props) => {
@@ -10,32 +9,33 @@ const HistoryYear: React.FC<HistoryYearProps> = (props) => {
     const [displayedYear1, setDisplayedYear1] = useState(currentYear?.years?.[0] ?? "")
     const [displayedYear2, setDisplayedYear2] = useState(currentYear?.years?.[1] ?? "")
 
-    useEffect(() => {
-        if(currentYear){
-            const startYear1 = displayedYear1
-            const endYear1 = currentYear.years[0]
-            const startYear2 = displayedYear2
-            const endYear2 = currentYear.years[1]
-
-            gsap.to({ val: startYear1 }, {
-                val: endYear1,
-                duration: 4,
-                ease: 'power2.out',
-                onUpdate: function () {
-                    setDisplayedYear1(Math.floor(this.targets()[0].val))
-                }
-            })
+    const animateNumber = (start: number, end: number, duration: number, updateCallback: (value: number) => void) => {
+        const startTime = performance.now();
     
-            gsap.to({ val: startYear2 }, {
-                val: endYear2,
-                duration: 4,
-                ease: 'power2.out',
-                onUpdate: function () {
-                    setDisplayedYear2(Math.floor(this.targets()[0].val))
-                }
-            })
+        const step = (currentTime: number) => {
+            const elapsedTime = currentTime - startTime
+            const progress = Math.min(elapsedTime / duration, 1)
+            const currentValue = start + (end - start) * progress
+            updateCallback(Math.floor(currentValue))
+
+            if (progress < 1) {
+                requestAnimationFrame(step)
+            }
         }
-        
+    
+        requestAnimationFrame(step)
+    }
+    
+    useEffect(() => {
+        if (currentYear) {
+            const startYear1 = parseInt(displayedYear1.toString(), 10)
+            const endYear1 = parseInt(currentYear.years[0].toString(), 10)
+            const startYear2 = parseInt(displayedYear2.toString(), 10)
+            const endYear2 = parseInt(currentYear.years[1].toString(), 10)
+
+            animateNumber(startYear1, endYear1, 4000, setDisplayedYear1)
+            animateNumber(startYear2, endYear2, 4000, setDisplayedYear2)
+        }
     }, [currentPage])
 
     return (
